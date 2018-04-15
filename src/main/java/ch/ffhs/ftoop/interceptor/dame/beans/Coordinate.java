@@ -56,4 +56,18 @@ public class Coordinate {
 		this.x = x;
 		this.y = y;
 	}
+	
+	/**
+	 * Common equals-method
+	 * 
+	 * @param coordinate Coordinate to compare
+	 * @return true if equal values
+	 */
+	public Boolean equals(Coordinate coordinate) {
+		if((this.x == coordinate.getX())&&(this.y==coordinate.getY())) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 }
