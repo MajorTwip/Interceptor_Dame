@@ -1,18 +1,25 @@
 package ch.ffhs.ftoop.interceptor.dame;
 
-public class Dame {
+import javafx.application.Application;
+import javafx.stage.Stage;
+
+public class Dame extends Application{
 	GUI gui;
 	Backend backend;
 	
 	
-	public Dame(String[] args) {
-		gui = new GUI(backend);
-		backend = new Backend(gui);
-	}
-	
-	
 	public static void main(String[] args) {
-		new Dame(args);
+		launch(args);
+		
+	}
+
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		gui = new GUI(backend, primaryStage);
+		backend = new Backend(gui);
+		
+		gui.showMenu();
 	}
 	
 	

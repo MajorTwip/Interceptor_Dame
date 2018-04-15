@@ -32,8 +32,7 @@ dependencies {
     testCompile 'com.github.stefanbirkner:system-rules:1.17.0'
 }
 
-mainClassName = 'ch.ffhs.ftoop.p2.prim.PrimeFinder'
+mainClassName = 'ch.ffhs.ftoop.interceptor.dame.Dame'
 
 run {
-	args = [1,2000,4]
 }
