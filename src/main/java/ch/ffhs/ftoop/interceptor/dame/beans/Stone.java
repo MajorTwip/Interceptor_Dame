@@ -18,7 +18,7 @@ public class Stone {
 	 * @param isOwn true if own stone, false if enemy
 	 * @param isQueen true if Dame, false for normal stones
 	 */
-	Stone(Coordinate coordinate, Boolean isOwn, Boolean isQueen){
+	public Stone(Coordinate coordinate, Boolean isOwn, Boolean isQueen){
 		this.coordinate = coordinate;
 		this.isOwn = isOwn;
 		this.isQueen = isQueen;

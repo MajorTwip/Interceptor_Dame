@@ -1,5 +1,8 @@
 package ch.ffhs.ftoop.interceptor.dame;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import ch.ffhs.ftoop.interceptor.dame.beans.Board;
 import ch.ffhs.ftoop.interceptor.dame.beans.Coordinate;
 import ch.ffhs.ftoop.interceptor.dame.beans.MessageBox;
@@ -15,17 +18,25 @@ public class GUI implements DameGUIInterface {
 	Scene menu;
 	Scene game;
 	
-	public GUI(Backend backend,Stage stage) {
-		this.backend = backend;
+	ResourceBundle texts;
+	
+	public GUI(Stage stage) {
 		this.stage = stage;
+		texts = ResourceBundle.getBundle("gui_texts", new Locale("EN"));
+
 		
-		stage.setTitle("DAME by Simon Reichenbach & Yvo von Känel");
+		stage.setTitle(texts.getString("title"));
+		stage.setMaximized(true);
+	}
+	
+	public void setBackend(Backend backend) {
+		this.backend = backend;
 	}
 	
 
 	@Override
 	public void showMenu() {
-		stage.setScene(new Scene(new GUIMenu()));
+		stage.setScene(new Scene(new GUIMenu(backend)));
 		stage.show();
 	}
 

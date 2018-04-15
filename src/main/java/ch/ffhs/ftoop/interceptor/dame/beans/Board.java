@@ -27,7 +27,7 @@ public class Board extends LinkedList<Stone>{
 	 * @param maxY Vertical dimension
 	 * @throws OutOfRangeException if Board should be too small
 	 */
-	Board(int maxX, int maxY) throws OutOfRangeException{
+	public Board(int maxX, int maxY) throws OutOfRangeException{
 		super();
 		if(maxX<4) throw new OutOfRangeException(maxX, 3, 255);
 		if(maxY<4) throw new OutOfRangeException(maxY, 3, 255);

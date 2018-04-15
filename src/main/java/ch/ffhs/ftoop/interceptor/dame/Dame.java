@@ -16,8 +16,11 @@ public class Dame extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		gui = new GUI(backend, primaryStage);
-		backend = new Backend(gui);
+		gui = new GUI(primaryStage);
+		backend = new Backend();
+		
+		backend.setGUI(gui);
+		gui.setBackend(backend);
 		
 		gui.showMenu();
 	}
