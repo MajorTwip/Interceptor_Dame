@@ -1,7 +1,14 @@
-6 Paralleles Berechnen von Divisoren
-Schreiben Sie ein Programm mit n Threads, das die Primzahlen im Intervall p bis q berechnet. Zerlegen Sie
-das Intervall dazu in n Teilintervalle und ermitteln Sie für jedes Intervall in jeweils einem Thread, welche
-Zahlen prim sind. Nutzen Sie das Executor-Framework und implementieren Sie Ihren Berechnungsthread
-mit Hilfe des Callable-Interface. Verfassen Sie zusätzlich einen aussagekräftigen Unit-Test.
-Nutzen Sie als Basis für Ihre Implementierung das Package ch.ffhs.ftoop.p1.divisor aus dem
-Quellcodepaket. Kopieren Sie die Vorlage in Ihr Aufgabenprojekt.
+Nachbearbeitung PVA 3
+
+Bitte beginnen Sie damit, das Dame Spiel wie besprochen zu implementieren. Beschäftigen Sie sich bis zur nächsten Präsenz mit der Organisation des Projekts, Implementierung der UI (evtl konsolenbasiert) und der Steuerung.
+
+Nachbearbeitung PVA 4
+
+Bitte schliessen Sie die Arbeit am Dame Spiel ab und implementieren Sie einen Computergegner.
+
+
+Regeln:
+
+https://www.brettspielnetz.de/spielregeln/dame.php
+
+Weitere Varianten könnten später implementiert werden.
