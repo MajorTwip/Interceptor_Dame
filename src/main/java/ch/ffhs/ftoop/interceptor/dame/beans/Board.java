@@ -83,4 +83,20 @@ public class Board extends LinkedList<Stone>{
 		}
 		throw new RuntimeException("No Stone at this coordinate");
 	}
+	
+	/**
+	 * Return horizontal limit
+	 * @return maxvalue of X
+	 */
+	public int getMaxX() {
+		return maxX;
+	}
+	
+	/**
+	 * Return vertical limit
+	 * @return maxvalue of Y
+	 */
+	public int getMaxY() {
+		return maxY;
+	}
 }

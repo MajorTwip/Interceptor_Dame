@@ -41,8 +41,8 @@ public class GUI implements DameGUIInterface {
 	}
 
 	@Override
-	public void showBoard(Board bard) {
-		stage.setScene(new Scene(new GUIBoard()));
+	public void showBoard(Board board) {
+		stage.setScene(new Scene(new GUIBoard(board)));
 		stage.show();
 	}
 
