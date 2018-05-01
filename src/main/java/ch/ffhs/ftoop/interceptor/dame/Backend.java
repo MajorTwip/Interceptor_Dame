@@ -57,7 +57,7 @@ public class Backend implements DameBackendInterface {
     @Override
     public void startNewGame(GameMode mode) {
         actualBoard = new Board(7, 7);
-        actualBoard.addStone(new Stone(new Coordinate(2, 4), true, false));
+        actualBoard.addStone(new Stone(new Coordinate(2, 4), true, true));
         gui.showBoard(actualBoard);
     }
 
