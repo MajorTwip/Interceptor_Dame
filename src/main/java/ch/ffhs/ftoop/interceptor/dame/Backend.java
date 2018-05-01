@@ -78,8 +78,8 @@ public class Backend implements DameBackendInterface {
      */
     @Override
     public boolean getTurnIsLegal(Stone stone, Coordinate coordinate) {
-        return false;
-
+        //return getAllowedCoordinates(stone).contains(coordinate);
+        return true;
     }
 
     /**
@@ -105,28 +105,49 @@ public class Backend implements DameBackendInterface {
         return actualBoard;
     }
 
-    public ArrayList<Coordinate> getAllowedCoordinates(Stone stone) {
-        ArrayList<Coordinate> allowedCoordinates = new ArrayList<>();
+    /**
+     * Gets all allowed new coordinates for a given stone
+     *
+     * @param stone       stone for which the allowed coordinates shall be returned
+     * @param coordinates an ArrayList in which the found allowed coordinates shall be put in to
+     * @return true if the coordinates are
+     */
+    public boolean getAllowedCoordinates(Stone stone, ArrayList<Coordinate> coordinates) {
+        ArrayList<Coordinate> moveCoordinates = new ArrayList<>();
+        ArrayList<Coordinate> killCoordinates = new ArrayList<>();
+
         for (Direction direction : Direction.getAllDirections()) {
             Coordinate.createCoordinate(stone.getCoordinate(), direction, 1)
-                    .ifPresent(allowedCoordinates::add);
+                    .ifPresent(moveCoordinates::add);
         }
-        for (Coordinate c : allowedCoordinates) {
-            if (!isTurnDirAllowed.check(stone, c)) {
-                allowedCoordinates.remove(c);
+        for (Coordinate coordinate : moveCoordinates) {
+            if (!isTurnDirAllowed.check(stone, coordinate)) {
+                moveCoordinates.remove(coordinate);
                 continue;
             }
-            if (isTurnBlockedByMe.check(stone, c)) {
-                allowedCoordinates.remove(c);
+            if (isTurnBlockedByMe.check(stone, coordinate)) {
+                moveCoordinates.remove(coordinate);
                 continue;
             }
-            if (isTurnBlockedByEnemy.check(stone, c)) {
-                allowedCoordinates.remove(c);
-                //TODO: add coordinate behind this coordinate
+            if (isTurnBlockedByEnemy.check(stone, coordinate)) {
+                Direction direction = Direction.getDirection(stone.getCoordinate(), coordinate).orElse(new Direction(0, 0, "Null"));
+                Coordinate.createCoordinate(stone.getCoordinate(), direction, 2)
+                        .ifPresent((Coordinate c) -> {
+                            if (actualBoard.fieldFree(c)) {
+                                killCoordinates.add(c);
+                            }
+                        });
             }
         }
 
-        return allowedCoordinates;
+        if (killCoordinates.isEmpty()) {
+            coordinates = moveCoordinates;
+            return false;
+        } else {
+            coordinates = killCoordinates;
+            return true;
+        }
+
     }
 
 }

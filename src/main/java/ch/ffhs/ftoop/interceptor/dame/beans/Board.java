@@ -1,9 +1,9 @@
 package ch.ffhs.ftoop.interceptor.dame.beans;
 
+import org.apache.commons.math3.exception.OutOfRangeException;
+
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import org.apache.commons.math3.exception.OutOfRangeException;
 
 /**
  * Represents a Gameboard
@@ -57,7 +57,7 @@ public class Board extends LinkedList<Stone>{
 	 * @param coordinate Coordinate to check
 	 * @return True if field is free
 	 */
-	private boolean fieldFree(Coordinate coordinate) {
+	public boolean fieldFree(Coordinate coordinate) {
 		try {
 			getStoneAt(coordinate);
 		}catch(RuntimeException e) {
