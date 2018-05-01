@@ -1,42 +1,70 @@
 package ch.ffhs.ftoop.interceptor.dame;
 
 import ch.ffhs.ftoop.interceptor.dame.beans.Board;
-import javafx.scene.control.Button;
+import ch.ffhs.ftoop.interceptor.dame.beans.Stone;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 public class GUIBoard extends GridPane{
 	Board board;
+	Boolean isLandscape = true;
+	GUIStone selectedStone = null;
 	
 	public GUIBoard(Board board) {
 		super();
 		
 		this.board = board;
 		
-		Button btn = new Button();
-        btn.setText("Go to menu");	
-        this.getChildren().add(btn);
-        
-        
-        Long squareSize = 100L;
-        
+		VBox.setVgrow(this, Priority.ALWAYS);
+		
+		this.setMinWidth(640);
+		this.setMinHeight(640);        
+
+	}
+	public void draw() {
+               
         for(int x=0; x<=board.getMaxX();x++) {
         	for(int y=0; y<=board.getMaxY();y++) {
-        		Rectangle square = new Rectangle();
-        		square.setWidth(squareSize);
-        		square.setHeight(squareSize);
+        		StackPane square = new StackPane();
+        		Color color;
         		if((x%2==1)^(y%2==1)) {
-        			square.setFill(Color.WHITE);
-        			System.out.println("Grey");
+        			color = Color.WHITE;
         		}else {
-        			square.setFill(Color.BLACK);
-        			System.out.println("Blue");
+        			color = Color.BLACK;
         		}
-        		GridPane.setColumnIndex(square, x+1);
+        		square.setBackground(new Background(new BackgroundFill(color,null,null)));
+        		GridPane.setColumnIndex(square, x);
         		GridPane.setRowIndex(square, y);
         		this.getChildren().addAll(square);
         	}
         }
+        for(int x=0; x<=board.getMaxX();x++) {
+        	this.getColumnConstraints().add(new ColumnConstraints(20, this.getWidth()/(board.getMaxX()+1), Double.POSITIVE_INFINITY,Priority.ALWAYS,HPos.CENTER,true));
+        }
+    	for(int y=0; y<=board.getMaxY();y++) {
+        	this.getRowConstraints().add(new RowConstraints(20, this.getHeight()/(board.getMaxY()+1), Double.POSITIVE_INFINITY,Priority.ALWAYS,VPos.CENTER,true));
+    	}
+    	
+    	for(Stone stone:board) {
+    		new GUIStone(this, stone);
+    	}
+
 	}
+	public void setClickedStone(GUIStone stone) {
+		if(selectedStone!=null)selectedStone.unselect();
+		this.selectedStone = stone;
+		stone.select();		
+	}
+	
 }
