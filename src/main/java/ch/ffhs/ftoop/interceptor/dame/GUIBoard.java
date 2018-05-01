@@ -1,9 +1,12 @@
 package ch.ffhs.ftoop.interceptor.dame;
 
 import ch.ffhs.ftoop.interceptor.dame.beans.Board;
+import ch.ffhs.ftoop.interceptor.dame.beans.Coordinate;
 import ch.ffhs.ftoop.interceptor.dame.beans.Stone;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.ColumnConstraints;
@@ -13,18 +16,20 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 
 public class GUIBoard extends GridPane{
+	Backend backend;
 	Board board;
 	Boolean isLandscape = true;
 	GUIStone selectedStone = null;
 	
-	public GUIBoard(Board board) {
+	
+	
+	public GUIBoard(Board board, Backend backend) {
 		super();
 		
 		this.board = board;
+		this.backend = backend;
 		
 		VBox.setVgrow(this, Priority.ALWAYS);
 		
@@ -46,6 +51,12 @@ public class GUIBoard extends GridPane{
         		square.setBackground(new Background(new BackgroundFill(color,null,null)));
         		GridPane.setColumnIndex(square, x);
         		GridPane.setRowIndex(square, y);
+        		
+        		square.setOnMouseEntered(e->mouseOver(e));
+        		square.setOnMouseExited(e->mouseLeaved(e));
+        		square.setOnMouseClicked(e->mouseClicked(e));
+        		
+        		
         		this.getChildren().addAll(square);
         	}
         }
@@ -61,6 +72,40 @@ public class GUIBoard extends GridPane{
     	}
 
 	}
+	private void mouseClicked(MouseEvent e) {
+		if(selectedStone!=null) {
+			Coordinate coord = new Coordinate(GridPane.getColumnIndex((Node) e.getSource()),
+				GridPane.getRowIndex((Node)e.getSource()));
+	
+		if(backend.getTurnIsLegal(selectedStone.getStone(), coord)){
+			backend.applyTurn(selectedStone.getStone(), coord);
+		}
+	}
+}
+	private void mouseOver(MouseEvent e) {
+		if(selectedStone!=null) {
+			Coordinate coord = new Coordinate(GridPane.getColumnIndex((Node) e.getSource()),
+					GridPane.getRowIndex((Node)e.getSource()));
+			
+			Color color = Color.RED;
+			if(backend.getTurnIsLegal(selectedStone.getStone(), coord)){
+				color = Color.GREEN;
+			}
+			((StackPane)e.getSource()).setBackground(new Background(new BackgroundFill(color,null,null)));
+		}
+	}
+	
+	private void mouseLeaved(MouseEvent e) {
+		Color color;
+		if((GridPane.getColumnIndex((Node) e.getSource())%2==1)^(GridPane.getRowIndex((Node)e.getSource())%2==1)) {
+			color = Color.WHITE;
+		}else {
+			color = Color.BLACK;
+		}
+		((StackPane)e.getSource()).setBackground(new Background(new BackgroundFill(color,null,null)));
+	}
+	
+	
 	public void setClickedStone(GUIStone stone) {
 		if(selectedStone!=null)selectedStone.unselect();
 		this.selectedStone = stone;

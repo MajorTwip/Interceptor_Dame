@@ -70,7 +70,7 @@ public class GUI implements DameGUIInterface {
 		Scene scene = new Scene(new VBox());
 		((VBox)scene.getRoot()).getChildren().add(getMenu());
 		
-		GUIBoard guiboard = new GUIBoard(board);
+		GUIBoard guiboard = new GUIBoard(board,backend);
 		((VBox)scene.getRoot()).getChildren().add(guiboard);
 		
 		stage.setScene(scene);

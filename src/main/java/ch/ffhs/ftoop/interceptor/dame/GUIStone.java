@@ -47,10 +47,14 @@ public class GUIStone extends StackPane{
 	}
 	
 	public void select() {
-		this.setBackground(new Background(new BackgroundFill(Color.AZURE, null, null)));
+		this.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
 	}
 	
 	public void unselect() {
 		this.setBackground(null);
+	}
+	
+	public Stone getStone() {
+		return stone;
 	}
 }
