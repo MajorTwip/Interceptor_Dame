@@ -7,9 +7,9 @@ package ch.ffhs.ftoop.interceptor.dame.beans;
  *
  */
 public class Stone {
-	Coordinate coordinate;
-	Boolean isOwn;
-	Boolean isQueen;
+    private Coordinate coordinate;
+    private Boolean isOwn;
+    private Boolean isQueen;
 	
 	/**
 	 * Initiates a playstone

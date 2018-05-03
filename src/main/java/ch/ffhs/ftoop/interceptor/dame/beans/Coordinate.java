@@ -2,6 +2,7 @@ package ch.ffhs.ftoop.interceptor.dame.beans;
 
 import org.apache.commons.math3.exception.OutOfRangeException;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -10,8 +11,8 @@ import java.util.Optional;
  * @author MajorTwip
  */
 public class Coordinate {
-    int x;
-    int y;
+    private int x;
+    private int y;
 
 
     /**
@@ -56,8 +57,8 @@ public class Coordinate {
     public static Optional<Coordinate> createCoordinate(Coordinate coordinate, Direction direction, int factor) {
         try {
             return Optional.of(new Coordinate(
-                    coordinate.getX() + direction.offsetX * factor,
-                    coordinate.getY() + direction.offsetY * factor
+                    coordinate.getX() + direction.getOffsetX() * factor,
+                    coordinate.getY() + direction.getOffsetY() * factor
             ));
         } catch (OutOfRangeException e) {
             return Optional.empty();
@@ -96,16 +97,43 @@ public class Coordinate {
     }
 
     /**
-     * Common equals-method
+     * Get the coordinate between (half way) two coordinates
+     * if the distance between the two coordinates is odd-numbered the function returns an Optional.empty
      *
-     * @param coordinate Coordinate to compare
+     * @param coordinate1 First Coordinate
+     * @param coordinate2 Second Coordinate
+     * @return Optional coordinate between the two arguments, if the distance is not odd-numbered
+     */
+    public static Optional<Coordinate> getCoordinateBetween(Coordinate coordinate1, Coordinate coordinate2) {
+        int offsetX = coordinate2.getX() - coordinate1.getX();
+        int offsetY = coordinate2.getY() - coordinate1.getY();
+        if (offsetX % 2 != 0 || offsetY % 2 != 0) return Optional.empty();
+
+        return Optional.of(new Coordinate(coordinate1.getX() + offsetX / 2, coordinate1.getY() + offsetY / 2));
+    }
+
+    /**
+     * Common equals-method
+     * @param obj Coordinate to compare
      * @return true if equal values
      */
-    public Boolean equals(Coordinate coordinate) {
-        if ((this.x == coordinate.getX()) && (this.y == coordinate.getY())) {
-            return true;
-        } else {
-            return false;
-        }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof Coordinate)) return false;
+
+        Coordinate coordinate = (Coordinate) obj;
+        return this.x == coordinate.getX() && this.y == coordinate.getY();
+    }
+
+    /**
+     * Common hashCode-method
+     *
+     * @return true if equal values
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.x + this.y);
     }
 }

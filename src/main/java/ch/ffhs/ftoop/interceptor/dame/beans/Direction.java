@@ -1,6 +1,7 @@
 package ch.ffhs.ftoop.interceptor.dame.beans;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -10,9 +11,9 @@ import java.util.Optional;
  * @version 20180428
  */
 public class Direction {
-    int offsetX;
-    int offsetY;
-    public String description;
+    private int offsetX;
+    private int offsetY;
+    private String description;
 
     /**
      * instantiates a new Direction object
@@ -67,18 +68,35 @@ public class Direction {
     /**
      * Common equals-method
      *
-     * @param direction Direction to compare
+     * @param obj Direction to compare
      * @return true if equal values
      */
-    public Boolean equals(Direction direction) {
-        return this.getOffsetX() == direction.getOffsetX() && this.getOffsetY() == direction.getOffsetY();
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof Direction)) return false;
+
+        Direction direction = (Direction) obj;
+        return this.getOffsetX() == direction.getOffsetX() &&
+                this.getOffsetY() == direction.getOffsetY();
     }
 
-    public int getOffsetX() {
+    /**
+     * Overrides defaul hashCode (because equal is overritten)
+     *
+     * @return hash from offsetX and offsetY
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getOffsetX(), this.getOffsetY());
+    }
+
+    int getOffsetX() {
         return offsetX;
     }
 
-    public int getOffsetY() {
+    int getOffsetY() {
         return offsetY;
     }
 }

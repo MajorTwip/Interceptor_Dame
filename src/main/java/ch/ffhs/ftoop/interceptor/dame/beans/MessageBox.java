@@ -1,16 +1,16 @@
 package ch.ffhs.ftoop.interceptor.dame.beans;
 
 public class MessageBox {
-	String title = "";
-	String header = "";
-	String message = "";
-	MsgType type;
-	
-	MessageBox(MsgType type){
+    private String title = "";
+    private String header = "";
+    private String message = "";
+    private MsgType type;
+
+    public MessageBox(MsgType type) {
 		this.type = type;
 	}
-	
-	MessageBox(String title, String message, MsgType type){
+
+    public MessageBox(String title, String message, MsgType type) {
 		this.title = title;
 		this.type = type;
 		this.message = message;
