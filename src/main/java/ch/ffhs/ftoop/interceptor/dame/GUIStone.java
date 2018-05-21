@@ -15,16 +15,20 @@ import javafx.scene.text.Text;
 public class GUIStone extends StackPane{
 	GUIBoard board;
 	Stone stone;
+	Circle circle;
+	
+
 	
 	GUIStone(GUIBoard board, Stone stone){
 		super();
 		this.board=board;
 		this.stone = stone;
 		GridPane.setHgrow(this, Priority.ALWAYS);
+		GridPane.setVgrow(this, Priority.ALWAYS);
 		
 		//Add Circle
 		
-		Circle circle = new Circle();
+		circle = new Circle();
 		circle.radiusProperty().bind(this.heightProperty().divide(3));
 		Color color = Color.BLACK;
 		if(stone.getIsOwn()) color = Color.WHITE;
@@ -42,7 +46,7 @@ public class GUIStone extends StackPane{
 		
 		this.setOnMouseClicked(e->board.setClickedStone(this));
 		
-		board.add(this, stone.getCoordinate().getX(), stone.getCoordinate().getY());
+		//board.add(this, stone.getCoordinate().getX(), stone.getCoordinate().getY());
 		
 	}
 	
@@ -57,4 +61,5 @@ public class GUIStone extends StackPane{
 	public Stone getStone() {
 		return stone;
 	}
+
 }

@@ -15,10 +15,8 @@ public class GUI implements DameGUIInterface {
 
     private Backend backend;
     private Stage stage;
-    private Scene menu;
-    private Scene game;
-
     private ResourceBundle texts;
+    GUIBoard guiboard=null;
 
     GUI(Stage stage) {
         this.stage = stage;
@@ -65,7 +63,7 @@ public class GUI implements DameGUIInterface {
         Scene scene = new Scene(new VBox());
         ((VBox) scene.getRoot()).getChildren().add(getMenu());
 
-        GUIBoard guiboard = new GUIBoard(board, backend);
+        guiboard = new GUIBoard(board, backend);
         ((VBox) scene.getRoot()).getChildren().add(guiboard);
 
         stage.setScene(scene);
@@ -122,16 +120,20 @@ public class GUI implements DameGUIInterface {
 
     @Override
     public void animateMove(Stone stone, Coordinate coordinate) {
-        // TODO , firstly just redrawing
+        if(guiboard!=null) {
+        	guiboard.animateMove(stone, coordinate);
+        }
     }
 
     @Override
     public void animateStoneRemove(Stone stone) {
-        // TODO , firstly just redrawing
+    	 if(guiboard!=null) {
+         	guiboard.animateStoneRemove(stone);
+         }
     }
 
     void redraw() {
-        showBoard(backend.getActualBoard());
+    	guiboard.redraw();
     }
 
 }

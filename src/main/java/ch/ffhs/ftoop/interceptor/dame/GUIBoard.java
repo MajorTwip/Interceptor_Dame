@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 class GUIBoard extends GridPane {
     private Backend backend;
     private Board board;
-    private Boolean isLandscape = true;
     private GUIStone selectedStone = null;
 
 
@@ -31,7 +30,7 @@ class GUIBoard extends GridPane {
     }
 
     void draw() {
-
+    	
         for (int x = 0; x <= board.getMaxX(); x++) {
             for (int y = 0; y <= board.getMaxY(); y++) {
                 StackPane square = new StackPane();
@@ -53,17 +52,35 @@ class GUIBoard extends GridPane {
                 this.getChildren().addAll(square);
             }
         }
-        for (int x = 0; x <= board.getMaxX(); x++) {
-            this.getColumnConstraints().add(new ColumnConstraints(20, this.getWidth() / (board.getMaxX() + 1), Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
+        if(this.getColumnConstraints().size()*this.getRowConstraints().size()==0) {
+	        for (int x = 0; x <= board.getMaxX(); x++) {
+	            this.getColumnConstraints().add(new ColumnConstraints(20, this.getWidth() / (board.getMaxX() + 1), Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
+	        }
+	        for (int y = 0; y <= board.getMaxY(); y++) {
+	            this.getRowConstraints().add(new RowConstraints(20, this.getHeight() / (board.getMaxY() + 1), Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
+	        }
         }
-        for (int y = 0; y <= board.getMaxY(); y++) {
-            this.getRowConstraints().add(new RowConstraints(20, this.getHeight() / (board.getMaxY() + 1), Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
-        }
+        
 
         for (Stone stone : board) {
-            new GUIStone(this, stone);
+        	getStackAt(stone.getCoordinate()).getChildren().add(new GUIStone(this, stone));
         }
 
+    }
+    
+    public void redraw() {
+    	clearStones();
+    	 for (Stone stone : board) {
+    		GUIStone guistone = new GUIStone(this, stone);
+         	getStackAt(stone.getCoordinate()).getChildren().add(guistone);
+         	guistone.toBack();
+         }   	
+    }
+    
+    private void clearStones() {
+    	for(Node node:this.getChildren()) {
+    		((StackPane)node).getChildren().removeIf(e->e.getClass().equals(GUIStone.class));
+    	}
     }
 
     private void mouseClicked(MouseEvent e) {
@@ -108,4 +125,34 @@ class GUIBoard extends GridPane {
         stone.select();
     }
 
+    public void animateMove(Stone stone, Coordinate coordinate) {
+    	
+    	GUIStoneAnimation disappearingstone = new GUIStoneAnimation(stone);
+    	getStackAt(stone.getCoordinate()).getChildren().add(disappearingstone);
+    	disappearingstone.toFront();
+    	disappearingstone.disappear();
+    	
+    	GUIStoneAnimation appearingstone = new GUIStoneAnimation(new Stone(coordinate,stone.getIsOwn(),stone.getIsQueen()));
+    	getStackAt(coordinate).getChildren().add(appearingstone);
+    	appearingstone.toFront();
+    	appearingstone.appear();
+    }
+    
+    public void animateStoneRemove(Stone stone) {
+    	GUIStoneAnimation disappearingstone = new GUIStoneAnimation(stone);
+    	getStackAt(stone.getCoordinate()).getChildren().add(disappearingstone);
+    	disappearingstone.disappear();
+    }
+    
+    private StackPane getStackAt(Coordinate coord) {
+    	for(Node node:this.getChildren()) {
+    		if(node.getClass().equals(StackPane.class)) {
+    			if((GridPane.getColumnIndex(node)==coord.getX())&&(GridPane.getRowIndex(node)==coord.getY())) {
+    				return (StackPane)node;
+    			}
+    		}
+    	}
+    	return null;
+    }
+    
 }

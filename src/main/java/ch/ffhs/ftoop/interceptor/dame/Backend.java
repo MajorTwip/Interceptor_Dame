@@ -105,6 +105,8 @@ public class Backend implements DameBackendInterface {
      */
     @Override
     public boolean applyTurn(Stone stone, Coordinate coordinate) {
+        gui.animateMove(stone, coordinate);
+    	
         Coordinate.getCoordinateBetween(stone.getCoordinate(), coordinate).ifPresent(actualBoard::removeStoneAt);
         stone.setCoordinate(coordinate);
 
@@ -113,8 +115,7 @@ public class Backend implements DameBackendInterface {
                 coordinate.getY() == 0 && stone.getIsOwn()) {
             stone.setIsQueen(true);
         }
-
-        gui.redraw(); //TODO use a proper way
+        gui.redraw(); 
         ownTurn = !ownTurn;
         getVictory().ifPresent((Boolean isOwn) -> {
             if (isOwn) {
