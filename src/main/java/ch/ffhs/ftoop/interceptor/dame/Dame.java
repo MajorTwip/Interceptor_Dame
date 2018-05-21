@@ -16,7 +16,7 @@ public class Dame extends Application{
 	
 	/**
 	 * startet die Application gemäss standarts JavaFX
-	 * @param args
+	 * @param args ignored
 	 */
 	public static void main(String[] args) {
 		launch(args);
