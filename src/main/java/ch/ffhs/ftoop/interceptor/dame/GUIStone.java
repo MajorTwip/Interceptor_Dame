@@ -12,13 +12,22 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+/**
+ * Visual representation of a Stone
+ * @author MajorTwip
+ *
+ */
 public class GUIStone extends StackPane{
 	GUIBoard board;
 	Stone stone;
 	Circle circle;
 	
 
-	
+	/**
+	 * Creates a new StackPane and the Circle which represents the stone 
+	 * @param board where it will be placed on, callback
+	 * @param stone to visualise
+	 */
 	GUIStone(GUIBoard board, Stone stone){
 		super();
 		this.board=board;
@@ -50,14 +59,25 @@ public class GUIStone extends StackPane{
 		
 	}
 	
+	
+	/**
+	 * show that this stone is selected by changing background to blue
+	 */
 	public void select() {
 		this.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
 	}
 	
+	/**
+	 * show that this stone is  NOT selected by removing blue background
+	 */
 	public void unselect() {
 		this.setBackground(null);
 	}
 	
+	/**
+	 * Gives back Stone which is represented
+	 * @return Stone 
+	 */
 	public Stone getStone() {
 		return stone;
 	}

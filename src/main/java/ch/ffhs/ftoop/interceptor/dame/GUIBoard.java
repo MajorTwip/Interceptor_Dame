@@ -10,12 +10,22 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+/**
+ * 	The visual interface to the game itself
+ * 
+ * @author MajorTwip
+ * @version 0.8
+ */
 class GUIBoard extends GridPane {
     private Backend backend;
     private Board board;
     private GUIStone selectedStone = null;
 
-
+    /**
+     * Shows the given board
+     * @param board Instance of Board to show
+     * @param backend Backend to which to send turns et.al
+     */
     GUIBoard(Board board, Backend backend) {
         super();
 
@@ -29,6 +39,10 @@ class GUIBoard extends GridPane {
 
     }
 
+    /**
+     * Setup of the Board
+     * BlackWhite and size
+     */
     void draw() {
     	
         for (int x = 0; x <= board.getMaxX(); x++) {
@@ -68,6 +82,9 @@ class GUIBoard extends GridPane {
 
     }
     
+    /**
+     * refreshes the stone's locations
+     */
     public void redraw() {
     	clearStones();
     	 for (Stone stone : board) {
@@ -77,12 +94,19 @@ class GUIBoard extends GridPane {
          }   	
     }
     
+    /**
+     * removes every stone from the shown board
+     */
     private void clearStones() {
     	for(Node node:this.getChildren()) {
     		((StackPane)node).getChildren().removeIf(e->e.getClass().equals(GUIStone.class));
     	}
     }
-
+    
+    /**
+     * Requests apply for choosen turn
+     * @param e MouseEvent from the clicked Stone
+     */
     private void mouseClicked(MouseEvent e) {
         if (selectedStone != null) {
             Coordinate coord = new Coordinate(GridPane.getColumnIndex((Node) e.getSource()),
@@ -94,6 +118,10 @@ class GUIBoard extends GridPane {
         }
     }
 
+    /**
+     * Checks if destination for selected stone would be legal. if so, show by green, otherwise by red.
+     * @param e MouseEvent from the hovered field
+     */
     private void mouseOver(MouseEvent e) {
         if (selectedStone != null) {
             Coordinate coord = new Coordinate(GridPane.getColumnIndex((Node) e.getSource()),
@@ -107,6 +135,10 @@ class GUIBoard extends GridPane {
         }
     }
 
+    /**
+     * returns backgroundcolor back to normal when mouse left
+     * @param e MouseEvent from the hovered field
+     */
     private void mouseLeaved(MouseEvent e) {
         Color color;
         if ((GridPane.getColumnIndex((Node) e.getSource()) % 2 == 1) ^ (GridPane.getRowIndex((Node) e.getSource()) % 2 == 1)) {
@@ -117,7 +149,10 @@ class GUIBoard extends GridPane {
         ((StackPane) e.getSource()).setBackground(new Background(new BackgroundFill(color, null, null)));
     }
 
-
+    /**
+     * Select a stone for further checks
+     * @param stone Selected stone to move
+     */
     void setClickedStone(GUIStone stone) {
         if (!backend.stoneCanBeSelected(stone.getStone())) return;
         if (selectedStone != null) selectedStone.unselect();
@@ -125,6 +160,12 @@ class GUIBoard extends GridPane {
         stone.select();
     }
 
+    /**
+     * Animates disappearing/reappearing of a stone
+     * 
+     * @param stone to make disappear
+     * @param coordinate where to reappear
+     */
     public void animateMove(Stone stone, Coordinate coordinate) {
     	
     	GUIStoneAnimation disappearingstone = new GUIStoneAnimation(stone);
@@ -137,13 +178,23 @@ class GUIBoard extends GridPane {
     	appearingstone.toFront();
     	appearingstone.appear();
     }
-    
+    /**
+     * Animates disappearing of a stone
+     * 
+     * @param stone to make disappear
+     */
     public void animateStoneRemove(Stone stone) {
     	GUIStoneAnimation disappearingstone = new GUIStoneAnimation(stone);
     	getStackAt(stone.getCoordinate()).getChildren().add(disappearingstone);
     	disappearingstone.disappear();
     }
     
+	
+    /**
+     * Helper to get back a field by its coordinates
+     * @param coord of the requested file
+     * @return StackPane which represents the field
+     */
     private StackPane getStackAt(Coordinate coord) {
     	for(Node node:this.getChildren()) {
     		if(node.getClass().equals(StackPane.class)) {

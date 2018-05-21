@@ -14,13 +14,22 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+
+/**
+ * Class to animate appearing/disappearing stones
+ * @author MajorTwip
+ * @version 0.8
+ */
 public class GUIStoneAnimation extends StackPane{
 	Stone stone;
 	Circle circle;
 	Text queen = null;
 	
 
-	
+	/**
+	 * visual representation of a stone
+	 * @param stone who defines color/status
+	 */
 	GUIStoneAnimation(Stone stone){
 		super();
 		this.stone = stone;
@@ -45,7 +54,9 @@ public class GUIStoneAnimation extends StackPane{
 			this.getChildren().add(queen);
 		}		
 	}
-
+	/**
+	 * starts disappearing of this stone and auto-destroys itself afterwards
+	 */
 	public void disappear(){
 		ImageView portal = new ImageView();
         portal.setImage(new Image("/portal.gif"));
@@ -63,6 +74,9 @@ public class GUIStoneAnimation extends StackPane{
 		scaleTransition.setOnFinished(e->((StackPane)this.getParent()).getChildren().remove(this));
 	}
 	
+	/**
+	 * starts appearing of this stone and auto-destroys itself afterwards
+	 */
 	public void appear(){
 		circle.setScaleX(0);
 		circle.setScaleY(0);
