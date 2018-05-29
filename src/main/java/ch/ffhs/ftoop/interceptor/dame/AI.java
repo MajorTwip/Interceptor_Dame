@@ -56,6 +56,7 @@ public class AI {
 		Board newBoard = new Board(oldBoard.getMaxX(),oldBoard.getMaxY());
 		for(Stone stone:oldBoard) {
 			newBoard.add(new Stone(stone.getCoordinate(),stone.getIsOwn(), stone.getIsQueen()));
+			newBoard.setOwnTurn(false);
 		}
 		return newBoard;
 	}
