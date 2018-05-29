@@ -126,4 +126,37 @@ public class Board extends LinkedList<Stone> {
 	public void setStoneEnforcement(Optional<Stone> stoneEnforcement) {
 		this.stoneEnforcement = stoneEnforcement;
 	}
+	
+	/**
+	 * returns a Stringrepresentation of the actual board
+	 */
+	public String toString() {
+		String returnString = "";
+		for(int y=0;y<=maxY;y++) {
+			for(int x=0;x<=maxX;x++) {
+				Stone stone = null;
+				try {
+					stone=this.getStoneAt(new Coordinate(x, y));
+				}catch(Exception e) {
+					
+				}
+				if(stone!=null) {
+					if(stone.getIsOwn()) {
+						returnString += "O"; 
+					}else {
+						returnString += "E"; 
+					}
+					if(stone.getIsQueen()) {
+						returnString += "Q"; 
+					}else {
+						returnString += "_"; 
+					}
+				}else {
+					returnString += "__"; 
+				}
+			}
+			returnString += "\n"; 
+		}
+		return returnString;
+	}
 }

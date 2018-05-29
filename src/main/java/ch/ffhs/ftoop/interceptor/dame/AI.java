@@ -10,6 +10,7 @@ import ch.ffhs.ftoop.interceptor.dame.beans.Board;
 import ch.ffhs.ftoop.interceptor.dame.beans.Coordinate;
 import ch.ffhs.ftoop.interceptor.dame.beans.Stone;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -27,7 +28,36 @@ public class AI {
 	 * @param backend a reference to a Backend instance for which the turn must be applied
 	 */
 	public static void makeTurn(Backend backend) {
-		//TODO MajorTwip: implement, if the stone can do more than one move it must be done here (this function is not called a second time)
+		Board actualBoard = backend.getActualBoard();
+		Board newBoard = copyBoard(actualBoard);
+		
+		System.out.println(actualBoard);
+		System.out.println(newBoard);
+		LinkedList<Coordinate> turns = getEnemyTurns(newBoard);
+		if(turns.size()<2) {
+			System.out.println("No enemy turns possible");
+		}else {
+			Iterator<Coordinate> turn = turns.iterator();
+			Stone stoneToMove = actualBoard.getStoneAt(turn.next());
+			while(turn.hasNext()) {
+				Coordinate newCoord = turn.next();
+				backend.applyTurn(stoneToMove, newCoord);
+				stoneToMove = actualBoard.getStoneAt(newCoord);
+			}
+		}
+	}
+	
+	/**
+	 * Returns a copy of a given Board. 
+	 * @param oldBoard The Board which acts as sample
+	 * @return Board which is a copy of the given one
+	 */
+	private static Board copyBoard(Board oldBoard) {
+		Board newBoard = new Board(oldBoard.getMaxX(),oldBoard.getMaxY());
+		for(Stone stone:oldBoard) {
+			newBoard.add(new Stone(stone.getCoordinate(),stone.getIsOwn(), stone.getIsQueen()));
+		}
+		return newBoard;
 	}
 
 	/**
@@ -45,15 +75,18 @@ public class AI {
 				}
 				LinkedList<Coordinate> possibleTurns = new LinkedList<Coordinate>();
 				RuleCheck.getAllowedCoordinates(board, stone, possibleTurns); //found coordinates are stored in possibleTurns
+				System.out.print(stone.toString() + " : ");
+				System.out.println(String.valueOf(possibleTurns.size()));
 				if (possibleTurns.size() > 0) {
 					for (Coordinate turn : possibleTurns) {
 						if (RuleCheck.canKillWithTurn(board, stone, turn)) {
-							//TODO MajorTwip: reimplement
-							/*LinkedList<Coordinate> futureTurns = getEnemyTurns(TurnApplier.applyTurn(board, stone, turn));
+							Board boardForRecursion = copyBoard(board);
+							boardForRecursion.getStoneAt(stone.getCoordinate()).setCoordinate(turn);
+							LinkedList<Coordinate> futureTurns = getEnemyTurns(boardForRecursion);
 							if (futureTurns.size() > (turns.size() - 1)) {
 								turns = futureTurns;
 								turns.addFirst(stone.getCoordinate());
-							}*/
+							}
 						} else {
 							if (turns.size() < 2) {
 								turns.add(turn);

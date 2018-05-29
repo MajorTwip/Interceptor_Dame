@@ -72,4 +72,20 @@ public class Stone {
 	public void setCoordinate(Coordinate coordinate) {
 		this.coordinate = coordinate;
 	}
+	
+	public String toString() {
+		String returnString = "Stone at coord " + this.getCoordinate().getX() + "/" + this.getCoordinate().getY();
+		if(this.isOwn) {
+			returnString += "is an Players";
+		}else {
+			returnString += "is an Enemys";
+		}
+		if(this.isQueen) {
+			returnString += " Queen";
+		}else {
+			returnString += " normal Stone";
+		}
+		return returnString;
+	}
+	
 }
