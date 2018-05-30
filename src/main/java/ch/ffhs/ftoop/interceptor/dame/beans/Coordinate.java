@@ -114,6 +114,7 @@ public class Coordinate {
 
     /**
      * Common equals-method
+     *
      * @param obj Coordinate to compare
      * @return true if equal values
      */
@@ -135,5 +136,10 @@ public class Coordinate {
     @Override
     public int hashCode() {
         return Objects.hash(this.x + this.y);
+    }
+
+    @Override
+    public String toString() {
+        return x + "/" + y;
     }
 }
