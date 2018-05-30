@@ -67,16 +67,12 @@ public class Backend implements DameBackendInterface {
      */
     @Override
     public boolean applyTurn(Stone stone, Coordinate coordinate) {
-		if (!RuleCheck.getTurnIsLegal(actualBoard, stone, coordinate)) {
-		    throw(new IllegalArgumentException("Trun with " + stone + " to " + coordinate + " is against the rules"));
-        }
-
         boolean killedStone = false;
         gui.animateMove(stone, coordinate);
 
-        //if the turn was enforced the stonEnforcment must be removed
+        //if the turn was enforced the stoneEnforcement must be removed
         if (actualBoard.getStoneEnforcement().isPresent()) {
-            actualBoard.setStoneEnforcement(Optional.empty());
+            actualBoard.setStoneEnforcementDisabled();
         }
 
         //Check if a stone can be killed with this turn an execute it

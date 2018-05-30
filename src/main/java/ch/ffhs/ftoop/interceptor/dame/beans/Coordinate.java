@@ -127,6 +127,6 @@ public class Coordinate {
 
     @Override
     public String toString() {
-        return x + "/" + y;
+        return getX() + "/" + getY();
     }
 }
