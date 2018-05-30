@@ -22,8 +22,8 @@ public class Coordinate {
      * @param y Vertical coordinate, from bottom to top
      */
     public Coordinate(int x, int y) throws OutOfRangeException {
-        if (x < 0) throw new OutOfRangeException(x, 1, 10);
-        if (y < 0) throw new OutOfRangeException(y, 1, 10);
+        if (x < 0) throw new OutOfRangeException(x, 0, Integer.MAX_VALUE);
+        if (y < 0) throw new OutOfRangeException(y, 0, Integer.MAX_VALUE);
         this.x = x;
         this.y = y;
     }
@@ -84,19 +84,6 @@ public class Coordinate {
     }
 
     /**
-     * Set Coordinate
-     *
-     * @param x Horizontal coordinate, from left to right
-     * @param y Vertical coordinate, from bottom to top
-     */
-    public void setXY(int x, int y) throws OutOfRangeException {
-        if (x < 0) throw new OutOfRangeException(x, 1, 10);
-        if (y < 0) throw new OutOfRangeException(y, 1, 10);
-        this.x = x;
-        this.y = y;
-    }
-
-    /**
      * Get the coordinate between (half way) two coordinates
      * if the distance between the two coordinates is odd-numbered the function returns an Optional.empty
      *
@@ -135,7 +122,7 @@ public class Coordinate {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(this.x + this.y);
+        return Objects.hash(this.x, this.y);
     }
 
     @Override

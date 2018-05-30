@@ -52,7 +52,7 @@ public class Backend implements DameBackendInterface {
      */
     boolean stoneCanBeSelected(Stone stone) {
         //in singleplayer enemy stones cant never be selected
-        if (isSinglePlayer() && !actualBoard.isOwnTurn()) {
+        if (isSinglePlayer() && !actualBoard.getOwnTurn()) {
             return false;
         }
         return RuleCheck.stoneCanBeSelected(actualBoard, stone);
@@ -106,10 +106,10 @@ public class Backend implements DameBackendInterface {
 
         //check if an additional turn is possible
         if (!RuleCheck.canKillEnemy(actualBoard, stone) || !killedStone) {
-            actualBoard.setOwnTurn(!actualBoard.isOwnTurn()); //no additional turn
+            actualBoard.setOwnTurn(!actualBoard.getOwnTurn()); //no additional turn
         } else {
             //additional turn but with same stone (is stated in the stoneEnforcement variable of the board)
-            actualBoard.setStoneEnforcement(Optional.of(stone));
+            actualBoard.setStoneEnforcement(stone);
         }
         return true;
     }

@@ -1,5 +1,7 @@
 package ch.ffhs.ftoop.interceptor.dame.beans;
 
+import org.apache.commons.math3.util.Pair;
+
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
@@ -43,8 +45,8 @@ public class Direction {
     }
 
     /**
-     * Gets the direction from a start and an end coordinate
-     * can only handle directions which have 90° or 45°
+     * Gets the direction from a start and and end coordinate
+     * can only handle directions which have 45° (which are allowed by getAllDirections
      *
      * @param coordinate1 coordinate of the start
      * @param coordinate2 coordinate of the end
@@ -63,6 +65,10 @@ public class Direction {
             }
         }
         return Optional.empty();
+    }
+
+    public Pair<Integer, Integer> getOffset() {
+        return new Pair<>(this.offsetX, this.offsetY);
     }
 
     /**
@@ -90,6 +96,11 @@ public class Direction {
     @Override
     public int hashCode() {
         return Objects.hash(this.getOffsetX(), this.getOffsetY());
+    }
+
+    @Override
+    public String toString() {
+        return "Direction " + this.description + " Offset: " + this.offsetX + "/" + this.offsetY;
     }
 
     int getOffsetX() {
