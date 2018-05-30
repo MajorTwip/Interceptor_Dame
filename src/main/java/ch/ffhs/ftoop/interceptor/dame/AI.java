@@ -33,6 +33,9 @@ public class AI {
 		Board actualBoard = backend.getActualBoard();
 		Board newBoard = copyBoard(actualBoard);
 		
+		
+		System.out.println();
+		System.out.println("new turn for enemy initiated");
 		//System.out.println(actualBoard);
 		//System.out.println(newBoard);
 		LinkedList<Coordinate> turns = getEnemyTurns(newBoard);
@@ -44,10 +47,18 @@ public class AI {
 			turns.stream().forEach(System.out::println);
 			Iterator<Coordinate> turn = turns.iterator();
 			Stone stoneToMove = actualBoard.getStoneAt(turn.next());
-			while(turn.hasNext()) {
-				Coordinate newCoord = turn.next();
-				backend.applyTurn(stoneToMove, newCoord);
-				stoneToMove = actualBoard.getStoneAt(newCoord);
+			Coordinate newCoord = turn.next();
+			backend.applyTurn(stoneToMove, newCoord);
+			stoneToMove = actualBoard.getStoneAt(newCoord);
+
+			while(turn.hasNext()) {	
+				newCoord = turn.next();
+				if(RuleCheck.canKillWithTurn(actualBoard, stoneToMove, newCoord)) {
+					backend.applyTurn(stoneToMove, newCoord);
+					stoneToMove = actualBoard.getStoneAt(newCoord);
+				}else {
+					break;
+				}
 			}
 		}
 	}
@@ -108,6 +119,7 @@ public class AI {
 					if (RuleCheck.canKillWithTurn(board, stone, turn)) {
 						Board boardForRecursion = copyBoard(board);
 						boardForRecursion.getStoneAt(stone.getCoordinate()).setCoordinate(turn);
+						//backend.appyTurn(boardForRecursion,stone,coordinate)
 						LinkedList<Coordinate> futureTurns = getEnemyTurnsForStone(boardForRecursion, turn);
 						if (futureTurns.size() > (turns.size() - 1)) {
 							turns = futureTurns;
