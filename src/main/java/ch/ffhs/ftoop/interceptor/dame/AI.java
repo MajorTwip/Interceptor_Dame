@@ -90,21 +90,14 @@ public class AI {
         System.out.println("New Iteration with Board:");
         System.out.println(board.toString());
         LinkedList<Coordinate> turns = new LinkedList<>();
+        boolean enemyKillable = RuleCheck.canKillEnemy(board);
         for (Stone stone : board) {
-            if (!stone.getIsOwn())
+            if (!stone.getIsOwn()
+                    && !(enemyKillable && !RuleCheck.canKillEnemy(board, stone))) {
                 turns = getTurnsForStone(board, turns, stone);
+            }
         }
         turns.stream().forEach(System.out::println);
-        return turns;
-    }
-
-    private static LinkedList<Coordinate> getEnemyTurnsForStone(Board board, Coordinate coordinate) {
-        System.out.println("New Iteration with Board for stone at :" + coordinate.toString());
-        System.out.println(board.toString());
-        LinkedList<Coordinate> turns = new LinkedList<>();
-        turns = getTurnsForStone(board, turns, board.getStoneAt(coordinate));
-        turns.stream().forEach(System.out::println);
-        System.out.println();
         return turns;
     }
 
@@ -115,14 +108,17 @@ public class AI {
             System.out.print(stone.toString() + " : ");
             System.out.println(String.valueOf(possibleTurns.size()) + ": " + possibleTurns.stream().map(n -> n.toString()).collect(Collectors.joining(";")));
             if (possibleTurns.size() > 0) {
+                //if there is at least one possible turn, the initial turn (coordinates of the stone) is added
+                // if not the turns array shall be rest free
                 if (turns.size() == 0) {
                     turns.add(stone.getCoordinate());
                 }
+
                 for (Coordinate turn : possibleTurns) {
                     if (RuleCheck.canKillWithTurn(board, stone, turn)) {
                         Board boardForRecursion = copyBoard(board);
 
-						//because board and its stone was copied, the stone must newly discovered with getStoneAt
+                        //because board and its stone was copied, the stone must newly discovered with getStoneAt
                         turns.addAll(getKillEscalationCoordinates(boardForRecursion, boardForRecursion.getStoneAt(stone.getCoordinate()), turn));
                     } else {
                         if (turns.size() < 2) {
