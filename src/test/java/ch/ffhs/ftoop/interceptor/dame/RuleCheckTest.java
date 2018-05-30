@@ -4,7 +4,6 @@ import ch.ffhs.ftoop.interceptor.dame.beans.Board;
 import ch.ffhs.ftoop.interceptor.dame.beans.Coordinate;
 import ch.ffhs.ftoop.interceptor.dame.beans.Stone;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -51,7 +51,7 @@ public class GUI implements DameGUIInterface {
         Menu menuGame = new Menu("Game");
 
         MenuItem menuItemNewGame = new MenuItem("New Game");
-        menuItemNewGame.setOnAction(e -> backend.startNewGame(GameMode.Singleplayer8X8));
+        menuItemNewGame.setOnAction(e -> backend.startNewGame(GameMode.SinglePlayer8X8));
 
         MenuItem menuItemQuit = new MenuItem("Quit");
         menuItemQuit.setOnAction(e -> backend.quitGame());

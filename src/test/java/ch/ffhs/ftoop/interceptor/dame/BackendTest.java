@@ -1,13 +1,10 @@
 package ch.ffhs.ftoop.interceptor.dame;
 
-import ch.ffhs.ftoop.interceptor.dame.beans.Coordinate;
-import ch.ffhs.ftoop.interceptor.dame.beans.GameMode;
-import ch.ffhs.ftoop.interceptor.dame.beans.Stone;
-import org.junit.After;
+import ch.ffhs.ftoop.interceptor.dame.beans.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 public class BackendTest {
     private Backend backend;
@@ -16,13 +13,12 @@ public class BackendTest {
     @Before
     public void setUp() {
         backend = new Backend();
-        backend.startNewGame(GameMode.MultiPlayer8X8);
-
+        backend.setActualBoard(new Board(4, 4));
         stone11 = new Stone(new Coordinate(1, 1), false, false);
         stone22 = new Stone(new Coordinate(2, 2), true, false);
         stone33 = new Stone(new Coordinate(3, 3), true, true);
         stone02 = new Stone(new Coordinate(0, 2), false, false);
-        stone44 = new Stone(new Coordinate(4, 4), false, false);
+        stone44 = new Stone(new Coordinate(4, 4), false, true);
         backend.getActualBoard().addStone(stone11);
         backend.getActualBoard().addStone(stone22);
         backend.getActualBoard().addStone(stone33);
@@ -30,14 +26,14 @@ public class BackendTest {
         backend.getActualBoard().addStone(stone44);
     }
 
-    @After
-    public void tearDown() {
-        backend.quitGame();
-    }
-
     @Test
     public void testStoneCanBeSelected() {
+        assertFalse(backend.stoneCanBeSelected(stone11));
+        assertTrue(backend.stoneCanBeSelected(stone22));
 
+        backend.getActualBoard().setOwnTurn(false);
+        assertTrue(backend.stoneCanBeSelected(stone11));
+        assertFalse(backend.stoneCanBeSelected(stone22));
     }
 
     @Test

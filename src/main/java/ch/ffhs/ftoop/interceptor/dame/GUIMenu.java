@@ -25,7 +25,7 @@ public class GUIMenu extends VBox {
 		Button btn_startgame = new Button();
 		btn_startgame.setPrefWidth(200);
 		btn_startgame.setText(texts.getString("btn_startgame"));	
-		btn_startgame.setOnAction(e->backend.startNewGame(GameMode.Singleplayer8X8));
+		btn_startgame.setOnAction(e->backend.startNewGame(GameMode.SinglePlayer8X8));
 		
 		Button btn_quitgame = new Button();
 		btn_quitgame.setPrefWidth(200);

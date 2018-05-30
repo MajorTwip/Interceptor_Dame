@@ -21,8 +21,8 @@ public class Backend implements DameBackendInterface {
     @Override
     public void startNewGame(GameMode mode) {
         singlePlayer = mode.isSinglePlayer();
+        actualBoard = new Board(mode.getMaxX(), mode.getMaxY());
 
-        actualBoard = new Board(7, 7);
         for (int coordinate[] : mode.getCoordinates()) {
             actualBoard.addStone(new Stone(new Coordinate(coordinate[0], coordinate[1]), false, false));
             actualBoard.addStone(new Stone(new Coordinate(coordinate[0], actualBoard.getMaxY() - 1 + coordinate[1]), true, false));
@@ -138,5 +138,9 @@ public class Backend implements DameBackendInterface {
 
     boolean isSinglePlayer() {
         return singlePlayer;
+    }
+
+    void setActualBoard(Board actualBoard) {
+        this.actualBoard = actualBoard;
     }
 }
