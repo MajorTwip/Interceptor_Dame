@@ -12,6 +12,8 @@ import ch.ffhs.ftoop.interceptor.dame.beans.Stone;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Artificial Intelligence... In fact just a mechanism which chooses a possible turn, if possible the one killing the most enemies
@@ -31,12 +33,15 @@ public class AI {
 		Board actualBoard = backend.getActualBoard();
 		Board newBoard = copyBoard(actualBoard);
 		
-		System.out.println(actualBoard);
-		System.out.println(newBoard);
+		//System.out.println(actualBoard);
+		//System.out.println(newBoard);
 		LinkedList<Coordinate> turns = getEnemyTurns(newBoard);
 		if(turns.size()<2) {
 			System.out.println("No enemy turns possible");
 		}else {
+			System.out.println();
+			System.out.println("Applying");
+			turns.stream().forEach(System.out::println);
 			Iterator<Coordinate> turn = turns.iterator();
 			Stone stoneToMove = actualBoard.getStoneAt(turn.next());
 			while(turn.hasNext()) {
@@ -68,37 +73,55 @@ public class AI {
 	 * TODO MajorTwip: rewrite, with functions of the RuleCheck Class
 	 */
 	private static LinkedList<Coordinate> getEnemyTurns(Board board) {
+		System.out.println("New Iteration with Board:");
+		System.out.println(board.toString());
 		LinkedList<Coordinate> turns = new LinkedList<>();
 		for (Stone stone : board) {
-			if (!stone.getIsOwn()) {
+			if (!stone.getIsOwn())
+				turns = getTurnsForStone(board, turns, stone);
+		}
+		turns.stream().forEach(System.out::println);
+		return turns;
+	}
+	
+	private static LinkedList<Coordinate> getEnemyTurnsForStone(Board board, Coordinate coordinate) {
+		System.out.println("New Iteration with Board for stone at :" + coordinate.toString());
+		System.out.println(board.toString());
+		LinkedList<Coordinate> turns = new LinkedList<>();
+		turns = getTurnsForStone(board, turns, board.getStoneAt(coordinate));
+		turns.stream().forEach(System.out::println);
+		System.out.println();
+		return turns;
+	}
+
+	private static LinkedList<Coordinate> getTurnsForStone(Board board, LinkedList<Coordinate> turns, Stone stone) {
+		{
+			LinkedList<Coordinate> possibleTurns = new LinkedList<Coordinate>();
+			RuleCheck.getAllowedCoordinates(board, stone, possibleTurns); //found coordinates are stored in possibleTurns
+			System.out.print(stone.toString() + " : ");
+			System.out.println(String.valueOf(possibleTurns.size()) + ": " + possibleTurns.stream().map(n->n.toString()).collect(Collectors.joining(";")));
+			if (possibleTurns.size() > 0) {
 				if (turns.size() == 0) {
 					turns.add(stone.getCoordinate());
 				}
-				LinkedList<Coordinate> possibleTurns = new LinkedList<Coordinate>();
-				RuleCheck.getAllowedCoordinates(board, stone, possibleTurns); //found coordinates are stored in possibleTurns
-				System.out.print(stone.toString() + " : ");
-				System.out.println(String.valueOf(possibleTurns.size()));
-				if (possibleTurns.size() > 0) {
-					for (Coordinate turn : possibleTurns) {
-						if (RuleCheck.canKillWithTurn(board, stone, turn)) {
-							Board boardForRecursion = copyBoard(board);
-							boardForRecursion.getStoneAt(stone.getCoordinate()).setCoordinate(turn);
-							LinkedList<Coordinate> futureTurns = getEnemyTurns(boardForRecursion);
-							if (futureTurns.size() > (turns.size() - 1)) {
-								turns = futureTurns;
-								turns.addFirst(stone.getCoordinate());
-							}
-						} else {
-							if (turns.size() < 2) {
-								turns.add(turn);
-							}
+				for (Coordinate turn : possibleTurns) {
+					if (RuleCheck.canKillWithTurn(board, stone, turn)) {
+						Board boardForRecursion = copyBoard(board);
+						boardForRecursion.getStoneAt(stone.getCoordinate()).setCoordinate(turn);
+						LinkedList<Coordinate> futureTurns = getEnemyTurnsForStone(boardForRecursion, turn);
+						if (futureTurns.size() > (turns.size() - 1)) {
+							turns = futureTurns;
+							turns.addFirst(stone.getCoordinate());
 						}
-
+					} else {
+						if (turns.size() < 2) {
+							turns.add(turn);
+						}
 					}
+
 				}
 			}
 		}
-
 		return turns;
 	}
 }
