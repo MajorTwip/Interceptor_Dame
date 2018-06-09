@@ -106,6 +106,7 @@ public class Backend implements DameBackendInterface {
         } else {
             //additional turn but with same stone (is stated in the stoneEnforcement variable of the board)
             actualBoard.setStoneEnforcement(stone);
+			return false;
         }
         return true;
     }
@@ -126,9 +127,17 @@ public class Backend implements DameBackendInterface {
      * @return Optional Boolean (true: Player 1 has won, false: Player 2 / Computer has won, Optional.empty: nobody has won
      */
     private Optional<Boolean> getVictory() {
-        if (actualBoard.stream().map(Stone::getIsOwn).distinct().count() == 1) {
+		//case 1: player has no more stones
+		if (actualBoard.stream().map(Stone::getIsOwn).distinct().count() == 1) {
             return Optional.of(actualBoard.getFirst().getIsOwn());
         }
+		//case 2: player is blocked
+		if (RuleCheck.isPlayerBlocked(actualBoard, actualBoard.getOwnTurn()))
+			return Optional.of(!actualBoard.getOwnTurn());
+		if (RuleCheck.isPlayerBlocked(actualBoard, !actualBoard.getOwnTurn()))
+			return Optional.of(actualBoard.getOwnTurn());
+
+		//case 3: no one has won
         return Optional.empty();
     }
 

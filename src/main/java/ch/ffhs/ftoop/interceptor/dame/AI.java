@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -74,8 +73,8 @@ public class AI {
         Board newBoard = new Board(oldBoard.getMaxX(), oldBoard.getMaxY());
         for (Stone stone : oldBoard) {
             newBoard.add(new Stone(stone.getCoordinate(), stone.getIsOwn(), stone.getIsQueen()));
-            newBoard.setOwnTurn(false);
-        }
+		}
+		newBoard.setOwnTurn(false);
         return newBoard;
     }
 
